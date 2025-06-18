@@ -10,7 +10,7 @@ Also, this presumes your Logik.ai environment has Transaction Manager enabled.
 # Deploying the Component Files to Salesforce
 
 1. Download and install the Salesforce Command Line Interface (CLI) using the instructions here: https://developer.salesforce.com/docs/atlas.en-us.sfdx_setup.meta/sfdx_setup/sfdx_setup_install_cli.htm
-2. Download the files in this repository, which contains the components used for RFQ.
+2. Download the files in this repository, which contains the components used for Subscriptions in Transaction Manager.
    - From the browser, click the "<> Code" dropdown for download options.
    - Alternatively, you can use the "git clone" command to download the files. For more information, see: https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository
 3. If the repository was downloaded as a .zip file, extract the files
@@ -26,5 +26,7 @@ Also, this presumes your Logik.ai environment has Transaction Manager enabled.
 9. In the command line, run the command "sf project deploy start --source-dir src --target-org myOrg". After a few moments, the command line will return a confirmation message, "Deploy Succeeded."
 10. (Optional) If the Salesforce org isn’t already open in a browser, it can be opened and logged in by running the command “sf org open --target-org myOrg”.
 
-# Setup Steps
+# Setup Steps in Salesforce
 TBD. Refer to steps from this document: https://logikio.atlassian.net/wiki/spaces/CLOUDACCEL/pages/1494056975/SFDC+Setup+for+Transaction+Manager#Subscriptions-Package-Setup
+
+# Setup Steps in Logik.ai
