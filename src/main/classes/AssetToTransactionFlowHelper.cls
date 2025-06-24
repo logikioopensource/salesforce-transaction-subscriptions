@@ -100,38 +100,38 @@ global with sharing class AssetToTransactionFlowHelper {
                 Map<Id, Date> assetEndDateMap = new Map<Id, Date>{};        // What should be the default EndDate on Renewals?
                 Map<Id, Id> childParentMap = new Map<Id, Id>{};
                 if (eachFlowInput.changeType.equalsIgnoreCase('Renew')) {
-                    String assetRevisionHistoryQueryString = 'SELECT Id, LGK__AssetId__c, LGK__EndDate__c' +
-                        ' FROM LGK__AssetRevisionHistory__c' +
+                    String assetRevisionHistoryQueryString = 'SELECT Id, LGK__AssetId__c, EndDate__c' +
+                        ' FROM AssetRevisionHistory__c' +
                         ' WHERE LGK__AssetId__c IN :assetIdList' +
-                        ' ORDER BY LGK__EndDate__c DESC';
-                    LGK__AssetRevisionHistory__c[] assetRevisionHistoryList = !Test.isRunningTest() ? 
+                        ' ORDER BY EndDate__c DESC';
+                    AssetRevisionHistory__c[] assetRevisionHistoryList = !Test.isRunningTest() ? 
                         Database.query(assetRevisionHistoryQueryString, AccessLevel.USER_MODE) :
                         Database.query(assetRevisionHistoryQueryString);
                     
-                    for (LGK__AssetRevisionHistory__c eachassetRevisionHistory : assetRevisionHistoryList) {
+                    for (AssetRevisionHistory__c eachassetRevisionHistory : assetRevisionHistoryList) {
                         // Don't need to date compare other Revision History for a given Asset, since the first record is always the latest for that Asset
                         if (!assetStartDateMap.containsKey(eachassetRevisionHistory.LGK__AssetId__c)) {
-                            assetStartDateMap.put(eachassetRevisionHistory.LGK__AssetId__c, eachassetRevisionHistory.LGK__EndDate__c.addDays(1));
-                            assetEndDateMap.put(eachassetRevisionHistory.LGK__AssetId__c, eachassetRevisionHistory.LGK__EndDate__c.addDays(1));
+                            assetStartDateMap.put(eachassetRevisionHistory.LGK__AssetId__c, eachassetRevisionHistory.EndDate__c.addDays(1));
+                            assetEndDateMap.put(eachassetRevisionHistory.LGK__AssetId__c, eachassetRevisionHistory.EndDate__c.addDays(1));
                         }
                     }
                 }
                 else {
-                    String assetRevisionHistoryQueryString = 'SELECT Id, LGK__AssetId__c, LGK__StartDate__c, LGK__EndDate__c' +
-                        ' FROM LGK__AssetRevisionHistory__c' +
+                    String assetRevisionHistoryQueryString = 'SELECT Id, LGK__AssetId__c, StartDate__c, EndDate__c' +
+                        ' FROM AssetRevisionHistory__c' +
                         ' WHERE LGK__AssetId__c IN :assetIdList' +
-                        ' ORDER BY LGK__StartDate__c DESC';
-                    LGK__AssetRevisionHistory__c[] assetRevisionHistoryList = !Test.isRunningTest() ? 
+                        ' ORDER BY StartDate__c DESC';
+                    AssetRevisionHistory__c[] assetRevisionHistoryList = !Test.isRunningTest() ? 
                         Database.query(assetRevisionHistoryQueryString, AccessLevel.USER_MODE) :
                         Database.query(assetRevisionHistoryQueryString);
                     
-                    for (LGK__AssetRevisionHistory__c eachassetRevisionHistory : assetRevisionHistoryList) {
+                    for (AssetRevisionHistory__c eachassetRevisionHistory : assetRevisionHistoryList) {
                         if (!assetStartDateMap.containsKey(eachassetRevisionHistory.LGK__AssetId__c)) {
-                            if (eachassetRevisionHistory.LGK__StartDate__c != null) {
-                                assetStartDateMap.put(eachassetRevisionHistory.LGK__AssetId__c, eachassetRevisionHistory.LGK__StartDate__c.addDays(1));
+                            if (eachassetRevisionHistory.StartDate__c != null) {
+                                assetStartDateMap.put(eachassetRevisionHistory.LGK__AssetId__c, eachassetRevisionHistory.StartDate__c.addDays(1));
                             }
-                            if (eachassetRevisionHistory.LGK__EndDate__c != null) {
-                                assetEndDateMap.put(eachassetRevisionHistory.LGK__AssetId__c, eachassetRevisionHistory.LGK__EndDate__c);
+                            if (eachassetRevisionHistory.EndDate__c != null) {
+                                assetEndDateMap.put(eachassetRevisionHistory.LGK__AssetId__c, eachassetRevisionHistory.EndDate__c);
                             }
                         }
                     }
@@ -168,8 +168,8 @@ global with sharing class AssetToTransactionFlowHelper {
                             // newTransactionLine.LGK__ConfigurationSolutionId__c = rootAsset.LGK__ConfigurationId__c;
                             newTransactionLine.LGK__IsConfigured__c = false;
                         }
-                        newTransactionLine.LGK__StartDate__c = assetStartDateMap.get(eachAsset.Id);
-                        newTransactionLine.LGK__EndDate__c = assetEndDateMap.get(eachAsset.Id);
+                        newTransactionLine.StartDate__c = assetStartDateMap.get(eachAsset.Id);
+                        newTransactionLine.EndDate__c = assetEndDateMap.get(eachAsset.Id);
                         newTransactionLineList.add(newTransactionLine);
                     // }
                 }

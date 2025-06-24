@@ -32,7 +32,7 @@
             ),
             new ObjectPermissions(
                 ParentId = testPermissionSet.Id,
-                SObjectType = 'LGK__AssetRevisionHistory__c',
+                SObjectType = 'AssetRevisionHistory__c',
                 PermissionsRead = true,
                 PermissionsCreate = true,
                 PermissionsEdit = true,
@@ -83,8 +83,8 @@
                 LGK__Product2Id__c = testProduct.Id,
                 LGK__Quantity__c = 5,
                 LGK__PricingNet__c = 10,
-                LGK__StartDate__c = Date.today(),
-                LGK__EndDate__c = Date.today().addYears(3)
+                StartDate__c = Date.today(),
+                EndDate__c = Date.today().addYears(3)
             );
             insert transactionLine;
 
@@ -97,13 +97,13 @@
                 LGK__TransactionLineId__c = transactionLine.Id
             );
             insert testAsset;
-            insert new LGK__AssetRevisionHistory__c(
+            insert new AssetRevisionHistory__c(
                 LGK__AssetId__c = testAsset.Id,
                 LGK__TransactionLineId__c = transactionLine.Id,
                 LGK__DeltaQuantity__c = 1,
                 LGK__DeltaPrice__c = 10,
-                LGK__StartDate__c = Date.today(),
-                LGK__EndDate__c = Date.today().addYears(1)
+                StartDate__c = Date.today(),
+                EndDate__c = Date.today().addYears(1)
             );
         }
     }
@@ -190,8 +190,8 @@
                 LGK__Product2Id__c = childTestProduct.Id,
                 LGK__Quantity__c = 5,
                 LGK__PricingNet__c = 10,
-                LGK__StartDate__c = Date.today(),
-                LGK__EndDate__c = Date.today().addYears(3)
+                StartDate__c = Date.today(),
+                EndDate__c = Date.today().addYears(3)
             );
             insert testTransactionLine;
 

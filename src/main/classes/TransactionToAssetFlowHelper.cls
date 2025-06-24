@@ -48,13 +48,13 @@ global with sharing class TransactionToAssetFlowHelper {
             Map<Id, LGK__TransactionLine__c> transactionLineIdMap = new Map<Id, LGK__TransactionLine__c>{};
             Map<LGK__TransactionLine__c, Asset> transactionLineAssetMap = new Map<LGK__TransactionLine__c, Asset>{};
             Asset[] newAssetList = new Asset[]{};
-            Map<Id, LGK__AssetRevisionHistory__c> newAssetRevisionMap = new Map<Id, LGK__AssetRevisionHistory__c>{};
+            Map<Id, AssetRevisionHistory__c> newAssetRevisionMap = new Map<Id, AssetRevisionHistory__c>{};
             for (LGK__TransactionLine__c eachLine : childTransactionLineList) {
                 transactionLineIdMap.put(eachLine.Id, eachLine);
                 if (each.changeType.equalsIgnoreCase('Add') ||
                     (
                         eachLine.LGK__AssetId__c == null &&
-                        String.isNotBlank(eachLine.LGK__SubscriptionBOMLineId__c)
+                        String.isNotBlank(eachLine.SubscriptionBOMLineId__c)
                     )
                 ) {
                     Asset newAsset = new Asset(
@@ -64,10 +64,10 @@ global with sharing class TransactionToAssetFlowHelper {
                         Quantity = eachLine.LGK__Quantity__c,
                         Price = eachLine.LGK__PricingNet__c,
                         LGK__TransactionLineId__c = eachLine.Id,
-                        // LGK__UniqueId__c = eachLine.LGK__SubscriptionBOMLineId__c,
-                        LGK__StartDate__c = eachLine.LGK__StartDate__c,
-                        LGK__EndDate__c = eachLine.LGK__EndDate__c,
-                        LGK__SubscriptionBOMLineId__c = eachLine.LGK__SubscriptionBOMLineId__c
+                        // LGK__UniqueId__c = eachLine.SubscriptionBOMLineId__c,
+                        StartDate__c = eachLine.StartDate__c,
+                        EndDate__c = eachLine.EndDate__c,
+                        SubscriptionBOMLineId__c = eachLine.SubscriptionBOMLineId__c
                     );
                     if (String.isNotBlank(eachLine.LGK__ConfigurationId__c)) {
                         newAsset.LGK__ConfigurationId__c = eachLine.LGK__ConfigurationId__c;
@@ -80,7 +80,7 @@ global with sharing class TransactionToAssetFlowHelper {
                 else if (each.changeType.equalsIgnoreCase('Amend') || each.changeType.equalsIgnoreCase('Renew')) {
                     Asset updatingAsset = updatingAssetIdMap.get(eachLine.LGK__AssetId__c);
                     if (updatingAsset != null) {
-                        if (String.isNotBlank(eachLine.LGK__SubscriptionBOMLineId__c)) {
+                        if (String.isNotBlank(eachLine.SubscriptionBOMLineId__c)) {
                             // Transaction Line is asset
                             updatingAsset = editAssetFieldValues(eachLine, updatingAsset);
                             updatingAssetIdMap.put(updatingAsset.Id, updatingAsset);
@@ -88,7 +88,7 @@ global with sharing class TransactionToAssetFlowHelper {
                         }
                         else {
                             // Transaction Line is revision history
-                            LGK__AssetRevisionHistory__c updatingRevision = createAssetRevision(eachLine);
+                            AssetRevisionHistory__c updatingRevision = createAssetRevision(eachLine);
                             updatingRevision.LGK__AssetId__c = updatingAsset.Id;
                             newAssetRevisionMap.put(eachLine.Id, updatingRevision);
                         }
@@ -132,7 +132,7 @@ global with sharing class TransactionToAssetFlowHelper {
                 transactionLineIdMap.put(transactionLine.Id, transactionLine);
 
                 // Update asset revision with asset Id
-                LGK__AssetRevisionHistory__c assetRevision = newAssetRevisionMap.get(transactionLine.Id);
+                AssetRevisionHistory__c assetRevision = newAssetRevisionMap.get(transactionLine.Id);
                 if (assetRevision != null) {
                     assetRevision.LGK__AssetId__c = eachAsset.Id;
                     newAssetRevisionMap.put(transactionLine.Id, assetRevision);
@@ -180,8 +180,8 @@ global with sharing class TransactionToAssetFlowHelper {
                     LGK__Quantity__c, LGK__DeltaQuantity__c, LGK__PricingNet__c, LGK__DeltaPrice__c, 
                     LGK__TransactionId__r.LGK__AccountId__c, LGK__Product2Id__r.Name,    // Relationship fields
                     LGK__IsConfigured__c, LGK__ConfigurationId__c,  // Config fields
-                    LGK__SubscriptionBOMLineId__c,  LGK__ParentTransactionLineId__c,
-                    LGK__AssetId__c, LGK__StartDate__c, LGK__EndDate__c    // Asset/Revision fields
+                    SubscriptionBOMLineId__c,  LGK__ParentTransactionLineId__c,
+                    LGK__AssetId__c, StartDate__c, EndDate__c    // Asset/Revision fields
                     // LGK__AssetRevisionHistoryId__c, LGK__AssetRevisionHistoryId__r.LGK__AssetId__c
                     // LGK__ParentAssetRevisionHistoryId__c, LGK__ParentAssetRevisionHistoryId__r.LGK__AssetId__c
                 FROM LGK__TransactionLine__c
@@ -212,7 +212,7 @@ global with sharing class TransactionToAssetFlowHelper {
         try {
             return new Map<Id, Asset>([
                 SELECT Id, AccountId, Product2Id, Quantity, Price, ParentId, 
-                    LGK__TransactionLineId__c, LGK__ConfigurationId__c, LGK__SubscriptionBOMLineId__c //, LGK__UniqueId__c
+                    LGK__TransactionLineId__c, LGK__ConfigurationId__c, SubscriptionBOMLineId__c //, LGK__UniqueId__c
                 FROM Asset
                 WHERE Id IN :assetIdSet
                 WITH USER_MODE
@@ -249,10 +249,10 @@ global with sharing class TransactionToAssetFlowHelper {
         updatingAsset.Product2Id = transactionLine.LGK__Product2Id__c;
         updatingAsset.Quantity = transactionLine.LGK__Quantity__c;
         updatingAsset.Price = transactionLine.LGK__PricingNet__c;
-        updatingAsset.LGK__StartDate__c = transactionLine.LGK__StartDate__c;
-        updatingAsset.LGK__EndDate__c = transactionLine.LGK__EndDate__c;
-        // updatingAsset.LGK__UniqueId__c = transactionLine.LGK__SubscriptionBOMLineId__c;
-        updatingAsset.LGK__SubscriptionBOMLineId__c = transactionLine.LGK__SubscriptionBOMLineId__c;
+        updatingAsset.StartDate__c = transactionLine.StartDate__c;
+        updatingAsset.EndDate__c = transactionLine.EndDate__c;
+        // updatingAsset.LGK__UniqueId__c = transactionLine.SubscriptionBOMLineId__c;
+        updatingAsset.SubscriptionBOMLineId__c = transactionLine.SubscriptionBOMLineId__c;
         // Configuration Id, ParentId, RootAssetId
         if (String.isNotBlank(transactionLine.LGK__ConfigurationId__c)) {
             updatingAsset.LGK__ConfigurationId__c = transactionLine.LGK__ConfigurationId__c;
@@ -261,30 +261,30 @@ global with sharing class TransactionToAssetFlowHelper {
         return updatingAsset;
     }
 
-    public static LGK__AssetRevisionHistory__c createAssetRevision(LGK__TransactionLine__c transactionLine) {
+    public static AssetRevisionHistory__c createAssetRevision(LGK__TransactionLine__c transactionLine) {
         if (transactionLine.LGK__AssetId__c == null) {
             // Add
-            return new LGK__AssetRevisionHistory__c(
+            return new AssetRevisionHistory__c(
                 LGK__TransactionLineId__c = transactionLine.Id,
                 LGK__Product2Id__c = transactionLine.LGK__Product2Id__c,
                 LGK__DeltaQuantity__c = transactionLine.LGK__Quantity__c,  // For new assets, deltas should be based on main quantity/price
                 LGK__DeltaPrice__c = transactionLine.LGK__PricingNet__c,
-                LGK__StartDate__c = transactionLine.LGK__StartDate__c,
-                LGK__EndDate__c = transactionLine.LGK__EndDate__c,
+                StartDate__c = transactionLine.StartDate__c,
+                EndDate__c = transactionLine.EndDate__c,
                 LGK__ConfigurationId__c = transactionLine.LGK__ConfigurationId__c,
-                LGK__SubscriptionBOMLineId__c = transactionLine.LGK__SubscriptionBOMLineId__c
+                SubscriptionBOMLineId__c = transactionLine.SubscriptionBOMLineId__c
                 // Missing until later for new assets: LGK__AssetId__c
             );
         }
         else {
             // Update
-            LGK__AssetRevisionHistory__c updatingAssetRevision = new LGK__AssetRevisionHistory__c(
+            AssetRevisionHistory__c updatingAssetRevision = new AssetRevisionHistory__c(
                 LGK__AssetId__c = transactionLine.LGK__AssetId__c,
                 LGK__TransactionLineId__c = transactionLine.Id,
-                LGK__StartDate__c = transactionLine.LGK__StartDate__c,
-                LGK__EndDate__c = transactionLine.LGK__EndDate__c,
+                StartDate__c = transactionLine.StartDate__c,
+                EndDate__c = transactionLine.EndDate__c,
                 LGK__ConfigurationId__c = transactionLine.LGK__ConfigurationId__c
-                // LGK__SubscriptionBOMLineId__c is blank for revision lines
+                // SubscriptionBOMLineId__c is blank for revision lines
             );
 
             // If the delta fields are null on the transaction line, assume no change (aka 0)

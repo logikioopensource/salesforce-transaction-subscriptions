@@ -9,5 +9,5 @@
     <openType>replace</openType>
     <protected>false</protected>
     <requireRowSelection>true</requireRowSelection>
-    <url>/flow/LGK/LogikAssetToTransaction?changeType=Renew</url>
+    <url>/flow/LogikAssetToTransaction?changeType=Renew</url>
 </WebLink>

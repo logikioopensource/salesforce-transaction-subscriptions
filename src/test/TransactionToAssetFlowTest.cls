@@ -32,7 +32,7 @@
             ),
             new ObjectPermissions(
                 ParentId = testPermissionSet.Id,
-                SObjectType = 'LGK__AssetRevisionHistory__c',
+                SObjectType = 'AssetRevisionHistory__c',
                 PermissionsRead = true,
                 PermissionsCreate = true,
                 PermissionsEdit = true,
@@ -83,9 +83,9 @@
                 LGK__Product2Id__c = testProduct.Id,
                 LGK__Quantity__c = 5,
                 LGK__PricingNet__c = 10,
-                LGK__StartDate__c = Date.today(),
-                LGK__EndDate__c = Date.today().addYears(3),
-                LGK__SubscriptionBOMLineId__c = 'testSubBomLineId',
+                StartDate__c = Date.today(),
+                EndDate__c = Date.today().addYears(3),
+                SubscriptionBOMLineId__c = 'testSubBomLineId',
                 LGK__ConfigurationId__c = 'testConfigId',
                 LGK__IsConfigured__c = true
             );
@@ -104,8 +104,8 @@
                 LIMIT 1
             ];
             LGK__TransactionLine__c childLine = [
-                SELECT Id, LGK__Product2Id__c, LGK__ConfigurationId__c, LGK__StartDate__c, LGK__EndDate__c,
-                    LGK__Quantity__c, LGK__DeltaQuantity__c, LGK__PricingNet__c, LGK__DeltaPrice__c, LGK__SubscriptionBOMLineId__c
+                SELECT Id, LGK__Product2Id__c, LGK__ConfigurationId__c, StartDate__c, EndDate__c,
+                    LGK__Quantity__c, LGK__DeltaQuantity__c, LGK__PricingNet__c, LGK__DeltaPrice__c, SubscriptionBOMLineId__c
                 FROM LGK__TransactionLine__c
                 LIMIT 1
             ];
@@ -118,7 +118,7 @@
             TransactionToAssetFlowHelper.upsertAssets(flowInputsList);
             // Assets
             Asset[] assetList = [
-                SELECT Id, AccountId, Product2Id, Quantity, Price, LGK__TransactionLineId__c, LGK__SubscriptionBOMLineId__c
+                SELECT Id, AccountId, Product2Id, Quantity, Price, LGK__TransactionLineId__c, SubscriptionBOMLineId__c
                 FROM Asset
             ];
             System.assertEquals(1, assetList.size(),
@@ -133,16 +133,16 @@
                 'Asset price did not match transaction line.');
             System.assertEquals(childLine.Id, assetList[0].LGK__TransactionLineId__c,
                 'Asset transaction line was not set correctly.');
-            System.assertEquals(childLine.LGK__SubscriptionBOMLineId__c, assetList[0].LGK__SubscriptionBOMLineId__c,
+            System.assertEquals(childLine.SubscriptionBOMLineId__c, assetList[0].SubscriptionBOMLineId__c,
                 'Asset Subscription BOM Line Id was not set correctly.');
 
             // Asset Revision History
-            LGK__AssetRevisionHistory__c[] assetRevisionHistoryList = [
+            AssetRevisionHistory__c[] assetRevisionHistoryList = [
                 SELECT LGK__TransactionLineId__c, 
                     LGK__DeltaQuantity__c,
                     LGK__DeltaPrice__c,
-                    LGK__StartDate__c, LGK__EndDate__c
-                FROM LGK__AssetRevisionHistory__c
+                    StartDate__c, EndDate__c
+                FROM AssetRevisionHistory__c
             ];
             System.assertEquals(1, assetRevisionHistoryList.size(),
                 'Number of Asset Revision History created did not match the expected amount.');
@@ -152,9 +152,9 @@
                 'Asset Revision History delta quantity did not match transaction line.');
             System.assertEquals(childLine.LGK__PricingNet__c, assetRevisionHistoryList[0].LGK__DeltaPrice__c,
                 'Asset Revision History quantity did not match transaction line.');
-            System.assertEquals(childLine.LGK__StartDate__c, assetRevisionHistoryList[0].LGK__StartDate__c,
+            System.assertEquals(childLine.StartDate__c, assetRevisionHistoryList[0].StartDate__c,
                 'Asset Revision History quantity did not match parent transaction.');
-            System.assertEquals(childLine.LGK__EndDate__c, assetRevisionHistoryList[0].LGK__EndDate__c,
+            System.assertEquals(childLine.EndDate__c, assetRevisionHistoryList[0].EndDate__c,
                 'Asset Revision History quantity did not match parent transaction.');
         }
         Test.stopTest();
@@ -175,7 +175,7 @@
             LGK__TransactionLine__c childLine = [
                 SELECT Id, LGK__Quantity__c, LGK__PricingNet__c, LGK__ConfigurationId__c,
                     LGK__Product2Id__c, LGK__Product2Id__r.Name,
-                    LGK__AssetId__c, LGK__StartDate__c, LGK__EndDate__c,
+                    LGK__AssetId__c, StartDate__c, EndDate__c,
                     LGK__DeltaQuantity__c, LGK__DeltaPrice__c
                 FROM LGK__TransactionLine__c
                 LIMIT 1
@@ -203,8 +203,8 @@
                 LGK__AssetId__c = newAsset.Id,
                 LGK__DeltaQuantity__c = 5,
                 LGK__DeltaPrice__c = -2,
-                LGK__StartDate__c = Date.today(),
-                LGK__EndDate__c = Date.today().addYears(3)
+                StartDate__c = Date.today(),
+                EndDate__c = Date.today().addYears(3)
             );
             insert revisionLine;
 
@@ -233,10 +233,10 @@
                 'Asset price did not update during Amend.');
 
             // Asset Revision History
-            LGK__AssetRevisionHistory__c[] assetRevisionHistoryList = [
-                SELECT LGK__TransactionLineId__c, LGK__StartDate__c, LGK__EndDate__c,
+            AssetRevisionHistory__c[] assetRevisionHistoryList = [
+                SELECT LGK__TransactionLineId__c, StartDate__c, EndDate__c,
                     LGK__DeltaQuantity__c, LGK__DeltaPrice__c
-                FROM LGK__AssetRevisionHistory__c
+                FROM AssetRevisionHistory__c
             ];
             System.assertEquals(1, assetRevisionHistoryList.size(),
                 'New Asset Revision History was not created during amend.');
@@ -247,9 +247,9 @@
                 'Asset Revision History delta quantity did not match transaction line.');
             System.assertEquals(revisionLine.LGK__DeltaPrice__c, assetRevisionHistoryList[0].LGK__DeltaPrice__c,
                 'Asset Revision History delta price did not match transaction line.');
-            System.assertEquals(revisionLine.LGK__StartDate__c, assetRevisionHistoryList[0].LGK__StartDate__c,
+            System.assertEquals(revisionLine.StartDate__c, assetRevisionHistoryList[0].StartDate__c,
                 'Asset Revision History start date did not match transaction line.');
-            System.assertEquals(revisionLine.LGK__EndDate__c, assetRevisionHistoryList[0].LGK__EndDate__c,
+            System.assertEquals(revisionLine.EndDate__c, assetRevisionHistoryList[0].EndDate__c,
                 'Asset Revision History end date did not match transaction line.');
         }
         Test.stopTest();
