@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>Original Configuration Id</label>
+    <protected>false</protected>
+    <values>
+        <field>IsActive__c</field>
+        <value xsi:type="xsd:boolean">true</value>
+    </values>
+    <values>
+        <field>SourceEnvironment__c</field>
+        <value xsi:type="xsd:string">Salesforce</value>
+    </values>
+    <values>
+        <field>SourceField__c</field>
+        <value xsi:type="xsd:string">LGK__ConfigurationId__c</value>
+    </values>
+    <values>
+        <field>SourceObject__c</field>
+        <value xsi:type="xsd:string">TransactionLine</value>
+    </values>
+    <values>
+        <field>TargetEnvironment__c</field>
+        <value xsi:type="xsd:string">Logik</value>
+    </values>
+    <values>
+        <field>TargetField__c</field>
+        <value xsi:type="xsd:string">txn.line.custom.sub_OriginalConfigId</value>
+    </values>
+    <values>
+        <field>TargetObject__c</field>
+        <value xsi:type="xsd:string">TransactionLine</value>
+    </values>
+</CustomMetadata>
