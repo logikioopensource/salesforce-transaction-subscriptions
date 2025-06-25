@@ -47,8 +47,8 @@ Also, this presumes your Logik.ai environment has Transaction Manager enabled.
 > This example uses the Asset related list on the Account page layout. These steps are available from any Asset list page, adjust the following steps as necessary.
 1. From Object Manager in admin Setup, open the Account object.
 2. Go to Page Layouts → _(whichever layout you want to update)_ → Related Lists.
-3. Under Related Lists, add the Assets object if it's not already added.
-4. Click the wrench icon to edit the Assets' related list. Move the “Amend” button from Available to Selected.
+3. Under Related Lists, add the Assets object if it's not already added. Click the wrench icon to edit the Assets' related list.
+4. Click the (+) button on the Buttons toolbar at the bottam of the modal. Move the “Amend” button from Available to Selected.
 5. Save the changes to the related list (press OK) to close the modal, then click Save to save the changes to the layout.
 
 

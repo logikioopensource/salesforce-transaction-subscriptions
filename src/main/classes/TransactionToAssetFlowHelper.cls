@@ -80,7 +80,7 @@ global with sharing class TransactionToAssetFlowHelper {
                 else if (each.changeType.equalsIgnoreCase('Amend') || each.changeType.equalsIgnoreCase('Renew')) {
                     Asset updatingAsset = updatingAssetIdMap.get(eachLine.LGK__AssetId__c);
                     if (updatingAsset != null) {
-                        if (String.isNotBlank(eachLine.SubscriptionBOMLineId__c)) {
+                        if (String.isNotBlank(eachLine.SubscriptionBOMLineId__c) || eachLine.LGK__IsConfigured__c) {
                             // Transaction Line is asset
                             updatingAsset = editAssetFieldValues(eachLine, updatingAsset);
                             updatingAssetIdMap.put(updatingAsset.Id, updatingAsset);
