@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField>
+    <fullName>AssetId__c</fullName>
+    <label>Asset</label>
+    <externalId>false</externalId>
+    <required>false</required>
+    <type>Lookup</type>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <referenceTo>Asset</referenceTo>
+    <relationshipLabel>Transaction Lines</relationshipLabel>
+    <relationshipName>AssetTransactionLines</relationshipName>
+</CustomField>

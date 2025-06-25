@@ -1,0 +1,31 @@
+{
+  "sfdcLoginUrl": "https://login.salesforce.com",
+  "sourceApiVersion": "64.0",
+  "packageDirectories": [
+    {
+      "path": "src",
+      "definitionFile": "config/project-scratch-def.json",
+      "package": "Logik.ai Subscriptions Package for Transaction Manager",
+      "versionNumber": "1.0.0.NEXT",
+      "default": true,
+      "dependencies": [
+          {
+              "package": "Logik.ai Managed Package@2.7.0.1"
+          },
+          {
+              "package": "Logik.ai Transaction Manager Package@0.6.0.5"
+          }
+      ],
+      "apexTestAccess": {
+        "permissionSets": [
+          "LogikTransactionAssetFullAccess"
+        ]
+      }
+    }
+  ],
+  "packageAliases": {
+    "Logik.ai Managed Package@2.7.0.1": "04t5e000000jAD6AAM",
+    "Logik.ai Transaction Manager Package@0.6.0.5": "04tUw000000WVWvIAO",
+    "Logik.ai Subscriptions Package for Transaction Manager": "0HoUw000000017NKAQ"
+  }
+}
