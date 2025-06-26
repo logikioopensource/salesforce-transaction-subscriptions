@@ -14,12 +14,12 @@ Also, this presumes your Logik.ai environment has Transaction Manager enabled.
    - From the browser, click the `<> Code` dropdown for download options.
    - Alternatively, you can use the `git clone` command to download the files. For more information, see: https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository
 3. If the repository was downloaded as a .zip file, extract the files
-   - On Windows, right click and select `*Extract All...*`. Follow the prompts that appear on screen.
+   - On Windows, right click and select `Extract All...`. Follow the prompts that appear on screen.
    - On Mac, double click the file and its contents will be extracted automatically in the same location.
 4. If it's not already running, launch the program *Terminal* (on Mac or Linux) or *Command Prompt* (on Windows).
 5. Use the change directory (cd) command to navigate to the unzipped directory. For example, if the files were extracted in the *Downloads* folder, type and enter the command `cd Downloads/salesforce-transaction-subscriptions`.
-6. Type and enter the command `ls` and a list of files and folders in that directory will be returned. Included in the list should be the folder `*src*` and the file `*sfdx-project.json*`, along with this README.
-7. Run the command `sf auth web login --alias *myOrg* --instance-url *https://example-dev-ed.my.salesforce.com*`
+6. Type and enter the command `ls` and a list of files and folders in that directory will be returned. Included in the list should be the folder `src` and the file `sfdx-project.json`, along with this README.
+7. Run the command `sf auth web login --alias myOrg --instance-url "https://example-dev-ed.my.salesforce.com"`
    - Replace the URL following `--instance-url` with your Salesforce org URL.
    - The text following `--alias` is a nickname that is used to identify and reference the correct Salesforce org (multiple Salesforce orgs can be connected to a single machine). The example `myOrg` will be used for the purposes of this guide; if using another alias here, be sure to use that same alias in the following steps.
 8. The URL specified in the previous login command will be opened in the default browser. Log in and authorize the `Salesforce CLI` connected app.
