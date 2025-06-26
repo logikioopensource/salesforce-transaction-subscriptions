@@ -74,7 +74,7 @@
             Account testAccount = new Account(Name = 'TestAccount');
             insert testAccount;
             LGK__Transaction__c newTransaction = new LGK__Transaction__c(
-                LGK__TransactionType__c = 'Quote',
+                TransactionType__c = 'Quote',
                 LGK__AccountId__c = testAccount.Id
             );
             insert newTransaction;
@@ -94,14 +94,14 @@
                 AccountId = testAccount.Id,
                 Quantity = transactionLine.LGK__Quantity__c,
                 Price = transactionLine.LGK__PricingNet__c,
-                LGK__TransactionLineId__c = transactionLine.Id
+                TransactionLineId__c = transactionLine.Id
             );
             insert testAsset;
             insert new AssetRevisionHistory__c(
-                LGK__AssetId__c = testAsset.Id,
-                LGK__TransactionLineId__c = transactionLine.Id,
-                LGK__DeltaQuantity__c = 1,
-                LGK__DeltaPrice__c = 10,
+                AssetId__c = testAsset.Id,
+                TransactionLineId__c = transactionLine.Id,
+                DeltaQuantity__c = 1,
+                DeltaPrice__c = 10,
                 StartDate__c = Date.today(),
                 EndDate__c = Date.today().addYears(1)
             );
@@ -203,7 +203,7 @@
                     AccountId = testAccount.Id,
                     Quantity = 10,
                     Price = 15,
-                    LGK__TransactionLineId__c = testTransactionLine.Id,
+                    TransactionLineId__c = testTransactionLine.Id,
                     ParentId = parentTestAsset.Id
                 );
             insert childAsset;

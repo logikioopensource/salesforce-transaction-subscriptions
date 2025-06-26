@@ -28,7 +28,7 @@
         </inputParameters>
         <nameSegment>TransactionToAssetFlowHelper</nameSegment>
     </actionCalls>
-    <apiVersion>62.0</apiVersion>
+    <apiVersion>64.0</apiVersion>
     <assignments>
         <name>ChangeTypeAdd</name>
         <label>Change Type = Add</label>
@@ -86,7 +86,7 @@
             <assignToReference>recordId</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>GetOpportunity.PrimaryTransactionId__c</elementReference>
+                <elementReference>GetOpportunity.LGK__PrimaryTransactionId__c</elementReference>
             </value>
         </assignmentItems>
         <connector>
@@ -106,7 +106,7 @@
             <name>PrimaryTransactionMissing</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>GetOpportunity.PrimaryTransactionId__c</leftValueReference>
+                <leftValueReference>GetOpportunity.LGK__PrimaryTransactionId__c</leftValueReference>
                 <operator>IsNull</operator>
                 <rightValue>
                     <booleanValue>true</booleanValue>
@@ -156,7 +156,7 @@
             <name>NoMissingFields</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>GetTriggeringTransaction.AccountId__c</leftValueReference>
+                <leftValueReference>GetTriggeringTransaction.LGK__AccountId__c</leftValueReference>
                 <operator>IsNull</operator>
                 <rightValue>
                     <booleanValue>false</booleanValue>
@@ -270,7 +270,7 @@
             </value>
         </filters>
         <getFirstRecordOnly>true</getFirstRecordOnly>
-        <object>Transaction__c</object>
+        <object>LGK__Transaction__c</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <screens>
@@ -316,7 +316,7 @@
         <allowPause>false</allowPause>
         <fields>
             <name>MissingDateDisplayText</name>
-            <fieldText>&lt;p&gt;One or more required fields are missing for &lt;span style=&quot;color: rgb(68, 68, 68); background-color: rgb(255, 255, 255);&quot;&gt;Transaction {!GetTriggeringTransaction.Id}.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Account: {!GetTriggeringTransaction.AccountId__c}&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Please review the Transaction and try again.&lt;/p&gt;</fieldText>
+            <fieldText>&lt;p&gt;One or more required fields are missing for &lt;span style=&quot;color: rgb(68, 68, 68); background-color: rgb(255, 255, 255);&quot;&gt;Transaction {!GetTriggeringTransaction.Id}.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br&gt;&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Account: {!GetTriggeringTransaction.LGK__AccountId__c}&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Please review the Transaction and try again.&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
         </fields>
         <showFooter>true</showFooter>
@@ -349,7 +349,7 @@
     <textTemplates>
         <name>AccountRedirectLink</name>
         <isViewedAsPlainText>true</isViewedAsPlainText>
-        <text>&lt;a href=&quot;/lightning/r/Account/{!GetTriggeringTransaction.AccountId__c}/view&quot; target=&quot;_self&quot;&gt;View Account&lt;/a&gt;</text>
+        <text>&lt;a href=&quot;/lightning/r/Account/{!GetTriggeringTransaction.LGK__AccountId__c}/view&quot; target=&quot;_self&quot;&gt;View Account&lt;/a&gt;</text>
     </textTemplates>
     <variables>
         <name>changeType</name>

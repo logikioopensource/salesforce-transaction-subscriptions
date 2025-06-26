@@ -30,7 +30,7 @@
         <required>false</required>
         <type>Lookup</type>
         <deleteConstraint>SetNull</deleteConstraint>
-        <referenceTo>TransactionLine__c</referenceTo>
+        <referenceTo>LGK__TransactionLine__c</referenceTo>
         <relationshipLabel>Asset Revision History</relationshipLabel>
         <relationshipName>AssetRevisionHistoryTransactionLine</relationshipName>
     </fields>

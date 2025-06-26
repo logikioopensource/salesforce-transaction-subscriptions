@@ -3,7 +3,7 @@
     <fullName>TransactionLineId__c</fullName>
     <label>Transaction Line Id</label>
     <type>Lookup</type>
-    <referenceTo>TransactionLine__c</referenceTo>
+    <referenceTo>LGK__TransactionLine__c</referenceTo>
     <relationshipLabel>Assets</relationshipLabel>
     <relationshipName>Assets</relationshipName>
     <deleteConstraint>SetNull</deleteConstraint>

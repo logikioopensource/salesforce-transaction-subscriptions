@@ -50,7 +50,7 @@ global with sharing class AssetToTransactionFlowHelper {
                 // Query for unselected parent config asset(s), if any
                 for (Asset eachDescendantAsset : [
                     SELECT Id, Product2Id, Quantity, Price, AccountId,
-                        LGK__ConfigurationId__c, LGK__OpportunityId__c,
+                        LGK__ConfigurationId__c, OpportunityId__c,
                         ParentId, RootAssetId
                     FROM Asset
                     WHERE RootAssetId IN :rootAssetIdSet
@@ -69,14 +69,14 @@ global with sharing class AssetToTransactionFlowHelper {
                 }
                 switch on eachFlowInput.changeType {
                     when 'Amend' {
-                        newTransaction.LGK__TransactionType__c = 'Amendment';
+                        newTransaction.TransactionType__c = 'Amendment';
                     }
                     when 'Renew' {
-                        newTransaction.LGK__TransactionType__c = 'Renewal';
-                        newTransaction.LGK__OpportunityId__c = assetList[0].LGK__OpportunityId__c;
+                        newTransaction.TransactionType__c = 'Renewal';
+                        newTransaction.LGK__OpportunityId__c = assetList[0].OpportunityId__c;
                     }
                     when else {
-                        newTransaction.LGK__TransactionType__c = 'Quote';
+                        newTransaction.TransactionType__c = 'Quote';
                     }
                 }
                 if (!Test.isRunningTest()) {
@@ -100,9 +100,9 @@ global with sharing class AssetToTransactionFlowHelper {
                 Map<Id, Date> assetEndDateMap = new Map<Id, Date>{};        // What should be the default EndDate on Renewals?
                 Map<Id, Id> childParentMap = new Map<Id, Id>{};
                 if (eachFlowInput.changeType.equalsIgnoreCase('Renew')) {
-                    String assetRevisionHistoryQueryString = 'SELECT Id, LGK__AssetId__c, EndDate__c' +
+                    String assetRevisionHistoryQueryString = 'SELECT Id, AssetId__c, EndDate__c' +
                         ' FROM AssetRevisionHistory__c' +
-                        ' WHERE LGK__AssetId__c IN :assetIdList' +
+                        ' WHERE AssetId__c IN :assetIdList' +
                         ' ORDER BY EndDate__c DESC';
                     AssetRevisionHistory__c[] assetRevisionHistoryList = !Test.isRunningTest() ? 
                         Database.query(assetRevisionHistoryQueryString, AccessLevel.USER_MODE) :
@@ -110,28 +110,28 @@ global with sharing class AssetToTransactionFlowHelper {
                     
                     for (AssetRevisionHistory__c eachassetRevisionHistory : assetRevisionHistoryList) {
                         // Don't need to date compare other Revision History for a given Asset, since the first record is always the latest for that Asset
-                        if (!assetStartDateMap.containsKey(eachassetRevisionHistory.LGK__AssetId__c)) {
-                            assetStartDateMap.put(eachassetRevisionHistory.LGK__AssetId__c, eachassetRevisionHistory.EndDate__c.addDays(1));
-                            assetEndDateMap.put(eachassetRevisionHistory.LGK__AssetId__c, eachassetRevisionHistory.EndDate__c.addDays(1));
+                        if (!assetStartDateMap.containsKey(eachassetRevisionHistory.AssetId__c)) {
+                            assetStartDateMap.put(eachassetRevisionHistory.AssetId__c, eachassetRevisionHistory.EndDate__c.addDays(1));
+                            assetEndDateMap.put(eachassetRevisionHistory.AssetId__c, eachassetRevisionHistory.EndDate__c.addDays(1));
                         }
                     }
                 }
                 else {
-                    String assetRevisionHistoryQueryString = 'SELECT Id, LGK__AssetId__c, StartDate__c, EndDate__c' +
+                    String assetRevisionHistoryQueryString = 'SELECT Id, AssetId__c, StartDate__c, EndDate__c' +
                         ' FROM AssetRevisionHistory__c' +
-                        ' WHERE LGK__AssetId__c IN :assetIdList' +
+                        ' WHERE AssetId__c IN :assetIdList' +
                         ' ORDER BY StartDate__c DESC';
                     AssetRevisionHistory__c[] assetRevisionHistoryList = !Test.isRunningTest() ? 
                         Database.query(assetRevisionHistoryQueryString, AccessLevel.USER_MODE) :
                         Database.query(assetRevisionHistoryQueryString);
                     
                     for (AssetRevisionHistory__c eachassetRevisionHistory : assetRevisionHistoryList) {
-                        if (!assetStartDateMap.containsKey(eachassetRevisionHistory.LGK__AssetId__c)) {
+                        if (!assetStartDateMap.containsKey(eachassetRevisionHistory.AssetId__c)) {
                             if (eachassetRevisionHistory.StartDate__c != null) {
-                                assetStartDateMap.put(eachassetRevisionHistory.LGK__AssetId__c, eachassetRevisionHistory.StartDate__c.addDays(1));
+                                assetStartDateMap.put(eachassetRevisionHistory.AssetId__c, eachassetRevisionHistory.StartDate__c.addDays(1));
                             }
                             if (eachassetRevisionHistory.EndDate__c != null) {
-                                assetEndDateMap.put(eachassetRevisionHistory.LGK__AssetId__c, eachassetRevisionHistory.EndDate__c);
+                                assetEndDateMap.put(eachassetRevisionHistory.AssetId__c, eachassetRevisionHistory.EndDate__c);
                             }
                         }
                     }
@@ -155,7 +155,7 @@ global with sharing class AssetToTransactionFlowHelper {
                             LGK__Product2Id__c = eachAsset.Product2Id,
                             LGK__Quantity__c = eachAsset.Quantity,
                             LGK__PricingNet__c = eachAsset.Price,
-                            LGK__AssetId__c = eachAsset.Id,
+                            AssetId__c = eachAsset.Id,
                             LGK__ConfigurationId__c = eachAsset.LGK__ConfigurationId__c
                         );
 
@@ -184,21 +184,21 @@ global with sharing class AssetToTransactionFlowHelper {
                 if (!childParentMap.isEmpty()) {
                     Map<Id, Id> parentAssetTransactionLineMap = new Map<Id, Id>{}; // <Asset, Transaction Line>
                     for (LGK__TransactionLine__c eachParent : [
-                        SELECT Id, LGK__AssetId__c
+                        SELECT Id, AssetId__c
                         FROM LGK__TransactionLine__c
-                        WHERE LGK__AssetId__c IN :childParentMap.values()
+                        WHERE AssetId__c IN :childParentMap.values()
                         WITH USER_MODE
                     ]) {
-                        parentAssetTransactionLineMap.put(eachParent.LGK__AssetId__c, eachParent.Id);
+                        parentAssetTransactionLineMap.put(eachParent.AssetId__c, eachParent.Id);
                     }
 
                     // Loop over inserted lists to set parent relationship and config id
                     for (LGK__TransactionLine__c eachLine : newTransactionLineList) {
                         if (
-                            childParentMap.get(eachLine.LGK__AssetId__c) != null
+                            childParentMap.get(eachLine.AssetId__c) != null
                         ) {
                             eachLine.LGK__ParentId2__c = parentAssetTransactionLineMap.get(
-                                childParentMap.get(eachLine.LGK__AssetId__c)
+                                childParentMap.get(eachLine.AssetId__c)
                             );
                         }
                     }
