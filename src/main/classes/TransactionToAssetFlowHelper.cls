@@ -283,7 +283,8 @@ global with sharing class TransactionToAssetFlowHelper {
                 LGK__TransactionLineId__c = transactionLine.Id,
                 StartDate__c = transactionLine.StartDate__c,
                 EndDate__c = transactionLine.EndDate__c,
-                LGK__ConfigurationId__c = transactionLine.LGK__ConfigurationId__c
+                LGK__ConfigurationId__c = transactionLine.LGK__ConfigurationId__c,
+                Product2Id__c = transactionLine.LGK__Product2Id__c
                 // SubscriptionBOMLineId__c is blank for revision lines
             );
 
