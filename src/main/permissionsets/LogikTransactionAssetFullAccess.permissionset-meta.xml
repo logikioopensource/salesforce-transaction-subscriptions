@@ -57,7 +57,7 @@
     </tabSettings>
     <customMetadataTypeAccesses>
         <enabled>true</enabled>
-        <name>TransactionFieldMap__mdt</name>
+        <name>LGK__TransactionFieldMap__mdt</name>
     </customMetadataTypeAccesses>
     <!-- Transaction Fields -->
     <fieldPermissions>
@@ -148,7 +148,7 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>LGK__TransactionLine__c.LGK__AssetId__c</field>
+        <field>LGK__TransactionLine__c.AssetId__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -288,7 +288,7 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>Asset.ConfigurationId__c</field>
+        <field>Asset.LGK__ConfigurationId__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
