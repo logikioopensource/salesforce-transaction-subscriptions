@@ -137,9 +137,10 @@ global with sharing class TransactionToAssetFlowHelper {
                     assetRevision.AssetId__c = eachAsset.Id;
                     newAssetRevisionMap.put(transactionLine.Id, assetRevision);
                     // Update asset with product Id, if it changed
-                    if (assetRevision.Product2Id__c != null && eachAsset.Product2Id != assetRevision.Product2Id__c) {
-                        eachAsset.Product2Id = assetRevision.Product2Id__c;
-                    }
+                    // if (assetRevision.Product2Id__c != null && eachAsset.Product2Id != assetRevision.Product2Id__c) {
+                    //     eachAsset.Name = assetRevision.Product2Id__r.Name;
+                    //     eachAsset.Product2Id = assetRevision.Product2Id__c;
+                    // }
                 }
                 
                 if (String.isNotBlank(transactionLine.LGK__ParentTransactionLineId__c) && 
@@ -211,7 +212,7 @@ global with sharing class TransactionToAssetFlowHelper {
 
         try {
             return new Map<Id, Asset>([
-                SELECT Id, AccountId, Product2Id, Quantity, Price, ParentId, 
+                SELECT Id, Name, AccountId, Product2Id, Quantity, Price, ParentId, 
                     TransactionLineId__c, LGK__ConfigurationId__c, SubscriptionBOMLineId__c //, LGK__UniqueId__c
                 FROM Asset
                 WHERE Id IN :assetIdSet
@@ -244,15 +245,19 @@ global with sharing class TransactionToAssetFlowHelper {
 
         // Update fields based on latest transaction line(s)
         updatingAsset.TransactionLineId__c = transactionLine.Id;
-        // Account, Product are less likely to change
+        // Account is less likely to change
         updatingAsset.AccountId = transactionLine.LGK__TransactionId__r.LGK__AccountId__c;
-        updatingAsset.Product2Id = transactionLine.LGK__Product2Id__c;
+        if (updatingAsset.Product2Id != transactionLine.LGK__Product2Id__c &&
+            updatingAsset.LGK__SubscriptionBOMLineId__c == transactionLine.LGK__SubscriptionBOMLineId__c
+        ) {
+            updatingAsset.Name = transactionLine.LGK__Product2Id__r.Name;
+            updatingAsset.Product2Id = transactionLine.LGK__Product2Id__c;
+        }
         updatingAsset.Quantity = transactionLine.LGK__Quantity__c;
         updatingAsset.Price = transactionLine.LGK__PricingNet__c;
         updatingAsset.StartDate__c = transactionLine.StartDate__c;
         updatingAsset.EndDate__c = transactionLine.EndDate__c;
-        // updatingAsset.LGK__UniqueId__c = transactionLine.SubscriptionBOMLineId__c;
-        updatingAsset.SubscriptionBOMLineId__c = transactionLine.SubscriptionBOMLineId__c;
+        // updatingAsset.SubscriptionBOMLineId__c = transactionLine.SubscriptionBOMLineId__c;
         // Configuration Id, ParentId, RootAssetId
         if (String.isNotBlank(transactionLine.LGK__ConfigurationId__c)) {
             updatingAsset.LGK__ConfigurationId__c = transactionLine.LGK__ConfigurationId__c;
