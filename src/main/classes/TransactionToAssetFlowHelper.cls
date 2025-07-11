@@ -125,28 +125,30 @@ global with sharing class TransactionToAssetFlowHelper {
             );
             Map<String, Asset> transactionLineIdAssetMap = new Map<String, Asset>{};
             for (Asset eachAsset : finalAssetUpsertList) {
-                // Update transaction line and map with asset 
-                LGK__TransactionLine__c transactionLine = transactionLineIdMap.get(eachAsset.TransactionLineId__c);
-                transactionLine.AssetId__c = eachAsset.Id;
-                transactionLineIdAssetMap.put(transactionLine.Id, eachAsset);
-                transactionLineIdMap.put(transactionLine.Id, transactionLine);
+                if (transactionLineIdMap.containsKey(eachAsset.TransactionLineId__c)) {
+                    // Update transaction line and map with asset 
+                    LGK__TransactionLine__c transactionLine = transactionLineIdMap.get(eachAsset.TransactionLineId__c);
+                    transactionLine.AssetId__c = eachAsset.Id;
+                    transactionLineIdAssetMap.put(transactionLine.Id, eachAsset);
+                    transactionLineIdMap.put(transactionLine.Id, transactionLine);
 
-                // Update asset revision with asset Id
-                AssetRevisionHistory__c assetRevision = newAssetRevisionMap.get(transactionLine.Id);
-                if (assetRevision != null) {
-                    assetRevision.AssetId__c = eachAsset.Id;
-                    newAssetRevisionMap.put(transactionLine.Id, assetRevision);
-                    // Update asset with product Id, if it changed
-                    // if (assetRevision.Product2Id__c != null && eachAsset.Product2Id != assetRevision.Product2Id__c) {
-                    //     eachAsset.Name = assetRevision.Product2Id__r.Name;
-                    //     eachAsset.Product2Id = assetRevision.Product2Id__c;
-                    // }
-                }
-                
-                if (String.isNotBlank(transactionLine.LGK__ParentTransactionLineId__c) && 
-                    transactionLineIdAssetMap.containsKey(transactionLine.LGK__ParentTransactionLineId__c)
-                ) {
-                    eachAsset.ParentId = transactionLineIdAssetMap.get(transactionLine.LGK__ParentTransactionLineId__c).Id;
+                    // Update asset revision with asset Id
+                    AssetRevisionHistory__c assetRevision = newAssetRevisionMap.get(transactionLine.Id);
+                    if (assetRevision != null) {
+                        assetRevision.AssetId__c = eachAsset.Id;
+                        newAssetRevisionMap.put(transactionLine.Id, assetRevision);
+                        // Update asset with product Id, if it changed
+                        // if (assetRevision.Product2Id__c != null && eachAsset.Product2Id != assetRevision.Product2Id__c) {
+                        //     eachAsset.Name = assetRevision.Product2Id__r.Name;
+                        //     eachAsset.Product2Id = assetRevision.Product2Id__c;
+                        // }
+                    }
+                    
+                    if (String.isNotBlank(transactionLine.LGK__ParentTransactionLineId__c) && 
+                        transactionLineIdAssetMap.containsKey(transactionLine.LGK__ParentTransactionLineId__c)
+                    ) {
+                        eachAsset.ParentId = transactionLineIdAssetMap.get(transactionLine.LGK__ParentTransactionLineId__c).Id;
+                    }
                 }
             }
 
@@ -248,7 +250,7 @@ global with sharing class TransactionToAssetFlowHelper {
         // Account is less likely to change
         updatingAsset.AccountId = transactionLine.LGK__TransactionId__r.LGK__AccountId__c;
         if (updatingAsset.Product2Id != transactionLine.LGK__Product2Id__c &&
-            updatingAsset.LGK__SubscriptionBOMLineId__c == transactionLine.LGK__SubscriptionBOMLineId__c
+            updatingAsset.SubscriptionBOMLineId__c == transactionLine.SubscriptionBOMLineId__c
         ) {
             updatingAsset.Name = transactionLine.LGK__Product2Id__r.Name;
             updatingAsset.Product2Id = transactionLine.LGK__Product2Id__c;
