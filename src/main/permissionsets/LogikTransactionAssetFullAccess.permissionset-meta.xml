@@ -283,12 +283,12 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>Opportunity.LGK__Id__c</field>
+        <field>OpportunityLineItem.AssetId__c</field>
         <readable>true</readable>
     </fieldPermissions>
-    <fieldPermissions>
+        <fieldPermissions>
         <editable>true</editable>
-        <field>Opportunity.AssetId__c</field>
+        <field>OpportunityLineItem.LGK__Id__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>

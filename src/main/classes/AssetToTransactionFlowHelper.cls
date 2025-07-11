@@ -31,7 +31,7 @@ global with sharing class AssetToTransactionFlowHelper {
                 // Collect selected assets and their original transaction lines
                 String[] assetIdList = eachFlowInput.assetIdList;
                 String assetQueryString = 'SELECT Id, Product2Id, Quantity, Price, AccountId' + 
-                ', LGK__ConfigurationId__c, LGK__OpportunityId__c' +
+                ', LGK__ConfigurationId__c, OpportunityId__c' +
                 ', ParentId, RootAssetId' + 
                 ' FROM Asset' +
                 ' WHERE Id IN :assetIdList' +
