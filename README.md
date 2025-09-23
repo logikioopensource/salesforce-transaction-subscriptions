@@ -27,7 +27,8 @@ Also, this presumes your Logik.ai environment has Transaction Manager enabled.
 10. (Optional) If the Salesforce org isn’t already open in a browser, it can be opened and logged in by running the command “sf org open --target-org myOrg”.
 
 # Setup Steps in Salesforce
-The user performing this setup needs read/write access to all the components that are included. The included Permission Set "Logik.ai Full Access (Transaction Subscriptions)" (`LogikTransactionAssetFullAccess`) has with access to all direct components.
+> [!NOTE]
+The user performing this setup needs read/write access to all the components that are included. The included Permission Set "Logik.ai Full Access (Transaction Subscriptions)" (`LogikTransactionAssetFullAccess`) has access to all direct components. In case you don't see any of the components referenced in this guide, make sure your user has the `LogikTransactionAssetFullAccess` permission set assigned to them.
 
 ## Customize Create Transaction Screen Flows
 1. From Setup Home, go to Process Automation → Flows.
