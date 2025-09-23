@@ -16,8 +16,8 @@
     </lookupFilter>
     -->
     <referenceTo>Opportunity</referenceTo>
-    <relationshipLabel>Assets</relationshipLabel>
-    <relationshipName>Assets</relationshipName>
+    <relationshipLabel>Transaction Assets</relationshipLabel>
+    <relationshipName>TransactionAssets</relationshipName>
     <required>false</required>
     <trackHistory>false</trackHistory>
     <type>Lookup</type>
