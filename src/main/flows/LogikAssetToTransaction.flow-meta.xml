@@ -359,8 +359,8 @@
         <allowFinish>false</allowFinish>
         <allowPause>false</allowPause>
         <fields>
-            <name>NewTransactionFrame</name>
-            <extensionName>LGK:transactionScreenFlowComponent</extensionName>
+            <name>Transaction Loading Screen</name>
+            <extensionName>LGK:transactionScreenFlowRedirect</extensionName>
             <fieldType>ComponentInstance</fieldType>
             <inputParameters>
                 <name>transactionId</name>
@@ -372,7 +372,7 @@
             <isRequired>true</isRequired>
             <storeOutputAutomatically>true</storeOutputAutomatically>
         </fields>
-        <showFooter>true</showFooter>
+        <showFooter>false</showFooter>
         <showHeader>false</showHeader>
     </screens>
     <screens>
