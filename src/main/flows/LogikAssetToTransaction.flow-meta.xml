@@ -359,8 +359,8 @@
         <allowFinish>false</allowFinish>
         <allowPause>false</allowPause>
         <fields>
-            <name>Transaction Loading Screen</name>
-            <extensionName>LGK:transactionScreenFlowRedirect</extensionName>
+            <name>TransactionRedirect</name>
+            <extensionName>c:transactionScreenFlowRedirect</extensionName>
             <fieldType>ComponentInstance</fieldType>
             <inputParameters>
                 <name>transactionId</name>
